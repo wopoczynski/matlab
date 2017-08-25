@@ -87,10 +87,10 @@ end
 
 
 % %% pVal dla hierarchiczn.
-% %M-zbiór wszystkich elem do losow.
-% %K-iloœæ wszystkich genów opisanych terminem GO;
-% %N-iloœæ genów w klastrze;
-% %x-iloœæ skucesów = ilosc genów opisanycg w analizowanym klastrze term. GO;
+% %M-zbiÃ³r wszystkich elem do losow.
+% %K-iloÅ“Ã¦ wszystkich genÃ³w opisanych terminem GO;
+% %N-iloÅ“Ã¦ genÃ³w w klastrze;
+% %x-iloÅ“Ã¦ skucesÃ³w = ilosc genÃ³w opisanycg w analizowanym klastrze term. GO;
 % for j=1:10
 %     x=clusterGOTermsNo{j};
 %     M=size(chipgenes);
@@ -125,16 +125,13 @@ end
 %GO(16874).Term.part_of;
 %% zad 8 raport
 fid=fopen('raport','w');
-fprintf(fid,'Raport z Laboratorium Bioinformatyki nr 1 i 2\n\n');
-name='Szymon Kocot';
-name2='Wojciech Opoczyñski';
-name3='£ukasz Witek';
-name4='Alexandra Zaj¹c';
-fprintf(fid,'Imiê i Nazwisko: %s \n',name,name2,name3,name4);
+fprintf(fid,'Raport\n\n');
+name='Wojciech OpoczyÃ±ski';
+fprintf(fid,'ImiÃª i Nazwisko: %s \n',name);
 fprintf(fid,'Data %s\n\n',datestr(now));
 method='klastrowanie hierarchiczne';
 fprintf(fid,'Metoda klastrowania: %s\n',method);
-for j=1:10      %tutaj zaczyna siê obliczanie pVal na klastrowanie
+for j=1:10      %tutaj zaczyna siÃª obliczanie pVal na klastrowanie
     x=clusterGOTermsNo{j};
     M=size(chipgenes);
     M=M(1);
@@ -142,7 +139,7 @@ for j=1:10      %tutaj zaczyna siê obliczanie pVal na klastrowanie
     K=chipGOTermsNo{j};
     
     pVal{j}=1-hygecdf(x-1,M,K,N);
-%koniec obliczeñ pVal na klastry 
+%koniec obliczeÃ± pVal na klastry 
     term = sort(pVal{j});
     name=GOTerms{j};
     wklastrze=clusterGOTermsNo{j};
@@ -199,7 +196,7 @@ for m=1:10
 end
 fclose(fid);
 
-%% zadanie 9
+% zadanie 9
 a=[0006278 0006508 0006515 0006623 0006810];
 subGO = GO(getancestors(GO, a));
 [cm acc rels] = getmatrix(subGO);
