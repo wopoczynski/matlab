@@ -1,0 +1,172 @@
+warning('off')
+cd 'D:\Dropbox\studia\GFiP\sem VII\lab3';
+load 'dane_selekcja.mat'; 
+ekspresja = ekspresja';
+
+% kmeans
+distance = {'sqeuclidean' 'cityblock' 'cosine' 'correlation'}; 
+initialCentrPos = {'cluster' 'plus' 'sample' 'uniform'};
+
+for i = 1 : numel(distance)
+    for j = 1 : numel(initialCentrPos)
+        resultK{i,j} = kmeans(ekspresja,2, 'Distance', distance{i}, 'Start', initialCentrPos{j});
+        resultK{i,j} = resultK{i,j}-1;
+
+	end
+end
+        mmKmeans{i,j} = numel(find(resultK{i,j}==pacjenci));
+        qualityKmeansError{i,j} = mmKmeans{i,j}/numel(pacjenci);
+        corrKmeans{i,j} = numel(pacjenci) - mmKmeans{i,j};
+        qualityKmeansAccuracy{i,j} = corrKmeans{i,j}/numel(pacjenci);
+
+resKmeansErr = table(initialCentrPos',qualityKmeansError);
+resKmeansErr = [resKmeansErr(:,1:1),table(resKmeansErr.qualityKmeansError(:,1),'VariableNames',{'qualityKmeansError1'}),...
+    table(resKmeansErr.qualityKmeansError(:,2),'VariableNames',{'qualityKmeansError2'}),...
+    table(resKmeansErr.qualityKmeansError(:,3),'VariableNames',{'qualityKmeansError3'}),...
+    table(resKmeansErr.qualityKmeansError(:,4),'VariableNames',{'qualityKmeansError4'})];
+resKmeansErr.Properties.VariableNames{2} = 'sqeuclidean';
+resKmeansErr.Properties.VariableNames{3} = 'cityblock';
+resKmeansErr.Properties.VariableNames{4} = 'cosine';
+resKmeansErr.Properties.VariableNames{5} = 'uniform';
+
+resKmeansAcc = table(initialCentrPos',qualityKmeansAccuracy);
+resKmeansAcc = [resKmeansAcc(:,1:1),table(resKmeansAcc.qualityKmeansAccuracy(:,1),'VariableNames',{'qualityKmeansError1'}),...
+table(resKmeansAcc.qualityKmeansAccuracy(:,2),'VariableNames',{'qualityKmeansError2'}),...
+table(resKmeansAcc.qualityKmeansAccuracy(:,3),'VariableNames',{'qualityKmeansError3'}),...
+table(resKmeansAcc.qualityKmeansAccuracy(:,4),'VariableNames',{'qualityKmeansError4'})];
+resKmeansAcc.Properties.VariableNames{2} = 'sqeuclidean';
+resKmeansAcc.Properties.VariableNames{3} = 'cityblock';
+resKmeansAcc.Properties.VariableNames{4} = 'cosine';
+resKmeansAcc.Properties.VariableNames{5} = 'uniform';
+
+
+% hierarhical
+distance = {'euclidean' 'seuclidean' 'cityblock' 'minkowski' 'chebychev' 'cosine' 'correlation' 'spearman' 'jaccard'};
+linkage = {'average' 'centroid' 'complete' 'median' 'single' 'ward' 'weighted'};
+
+for i = 1 : numel(distance)
+    for j = 1 : numel(linkage)
+        resultHier{i,j} = clusterdata(ekspresja, 'distance', distance{i}, 'linkage', linkage{j}, 'maxclust', 2)';
+        resultHier{i,j} = resultHier{i,j}-1;
+        mmHierarhical{i,j} = numel(find(resultHier{i,j}==pacjenci'));
+        qualityHierarhicalErr{i,j} = mmHierarhical{i,j}/numel(pacjenci');
+        corrHierarhical{i,j} = numel(pacjenci) - mmHierarhical{i,j};
+        qualityHierarhicalAccuracy{i,j} = corrHierarhical{i,j}/numel(pacjenci);
+        
+    end
+end
+
+resHierarhicalErr = table(distance',qualityHierarhicalErr);
+resHierarhicalErr = [resHierarhicalErr(:,1:1),table(resHierarhicalErr.qualityHierarhicalErr(:,1),'VariableNames',{'qualityHierarhical1'}),...
+    table(resHierarhicalErr.qualityHierarhicalErr(:,2),'VariableNames',{'qualityHierarhical2'}),...
+    table(resHierarhicalErr.qualityHierarhicalErr(:,3),'VariableNames',{'qualityHierarhical3'}),...
+    table(resHierarhicalErr.qualityHierarhicalErr(:,4),'VariableNames',{'qualityHierarhical4'}),...
+    table(resHierarhicalErr.qualityHierarhicalErr(:,5),'VariableNames',{'qualityHierarhical5'}),...
+    table(resHierarhicalErr.qualityHierarhicalErr(:,6),'VariableNames',{'qualityHierarhical6'}),...
+    table(resHierarhicalErr.qualityHierarhicalErr(:,7),'VariableNames',{'qualityHierarhical7'})];
+
+resKmeansErr.Properties.VariableNames{2} = 'sqeuclidean';
+resHierarhicalErr.Properties.VariableNames{2} = 'average';
+resHierarhicalErr.Properties.VariableNames{3} = 'centroid';
+resHierarhicalErr.Properties.VariableNames{4} = 'complete';
+resHierarhicalErr.Properties.VariableNames{5} = 'median';
+resHierarhicalErr.Properties.VariableNames{6} = 'single';
+resHierarhicalErr.Properties.VariableNames{7} = 'ward';
+resHierarhicalErr.Properties.VariableNames{8} = 'weighted';
+
+resHierarhicalAccuracy = table(distance',qualityHierarhicalAccuracy);
+resHierarhicalAccuracy = [resHierarhicalAccuracy(:,1:1),table(resHierarhicalAccuracy.qualityHierarhicalAccuracy(:,1),'VariableNames',{'qualityHierarhical1'}),...
+    table(resHierarhicalAccuracy.qualityHierarhicalAccuracy(:,2),'VariableNames',{'qualityHierarhical2'}),...
+    table(resHierarhicalAccuracy.qualityHierarhicalAccuracy(:,3),'VariableNames',{'qualityHierarhical3'}),...
+    table(resHierarhicalAccuracy.qualityHierarhicalAccuracy(:,4),'VariableNames',{'qualityHierarhical4'}),...
+    table(resHierarhicalAccuracy.qualityHierarhicalAccuracy(:,5),'VariableNames',{'qualityHierarhical5'}),...
+    table(resHierarhicalAccuracy.qualityHierarhicalAccuracy(:,6),'VariableNames',{'qualityHierarhical6'}),...
+    table(resHierarhicalAccuracy.qualityHierarhicalAccuracy(:,7),'VariableNames',{'qualityHierarhical7'})];
+
+resKmeansErr.Properties.VariableNames{2} = 'sqeuclidean';
+resHierarhicalAccuracy.Properties.VariableNames{2} = 'average';
+resHierarhicalAccuracy.Properties.VariableNames{3} = 'centroid';
+resHierarhicalAccuracy.Properties.VariableNames{4} = 'complete';
+resHierarhicalAccuracy.Properties.VariableNames{5} = 'median';
+resHierarhicalAccuracy.Properties.VariableNames{6} = 'single';
+resHierarhicalAccuracy.Properties.VariableNames{7} = 'ward';
+resHierarhicalAccuracy.Properties.VariableNames{8} = 'weighted';
+
+% kohonen
+distance = {'dist' 'linkdist' 'mandist' 'boxdist'};
+topology = {'gridtop' 'hextop' 'randtop'};
+
+for i = 1 : numel(distance)
+    for j = 1 : numel(topology)
+        
+        net = selforgmap([2 1], 'distanceFCN', distance{i}, 'topologyFCN', topology{j});
+        net.trainParam.showWindow = false;
+        net = train(net, ekspresja');
+        resultKohonen{i,j} = net(ekspresja');
+        resultKohonen{i,j} = vec2ind(resultKohonen{i,j});
+        resultKohonen{i,j} = resultKohonen{i,j} - 1;
+        mmKohonen{i,j} = numel(find(resultKohonen{i,j}==pacjenci'));
+        qualityKohonenErr{i,j} = mmKohonen{i,j}/numel(pacjenci);
+        corrKohonen{i,j} = numel(pacjenci) - mmKohonen{i,j};
+        qualityKohonenAccuracy{i,j} = corrKohonen{i,j}/numel(pacjenci);        
+    end
+end
+
+resKohonenErr = table(distance',qualityKohonenErr);
+resKohonenErr = [resKohonenErr(:,1:1),table(resKohonenErr.qualityKohonenErr(:,1),'VariableNames',...
+    {'qualityKohonen1'}),table(resKohonenErr.qualityKohonenErr(:,2),'VariableNames',{'qualityKohonen2'}),...
+    table(resKohonenErr.qualityKohonenErr(:,3),'VariableNames',{'qualityKohonen3'})];
+resKohonenErr.Properties.VariableNames{2} = 'gridtop';
+resKohonenErr.Properties.VariableNames{3} = 'hextop';
+resKohonenErr.Properties.VariableNames{4} = 'randtop';
+
+resKohonenAccuracy = table(distance',qualityKohonenAccuracy);
+resKohonenAccuracy = [resKohonenAccuracy(:,1:1),table(resKohonenAccuracy.qualityKohonenAccuracy(:,1),'VariableNames',...
+    {'qualityKohonen1'}),table(resKohonenAccuracy.qualityKohonenAccuracy(:,2),'VariableNames',{'qualityKohonen2'}),...
+    table(resKohonenAccuracy.qualityKohonenAccuracy(:,3),'VariableNames',{'qualityKohonen3'})];
+resKohonenAccuracy.Properties.VariableNames{2} = 'gridtop';
+resKohonenAccuracy.Properties.VariableNames{3} = 'hextop';
+resKohonenAccuracy.Properties.VariableNames{4} = 'randtop';
+
+ekspresja=ekspresja';
+%%
+figure(1);
+subplot(1,2,1)
+heatmap(ekspresja(:, resultK{1,1}==0))
+title('zdrowi');
+xlabel('pacjenci');
+ylabel('ekspresja');
+subplot(1,2,2)
+heatmap(ekspresja(:, resultK{1,1}==1))
+title('chorzy');
+xlabel('pacjenci');
+ylabel('ekspresja');
+suptitle('wyniki klasteryzacji k-means');
+
+figure(2);
+subplot(1,2,1)
+heatmap(ekspresja(:, resultHier{2,7}==0))
+title('zdrowi');
+xlabel('pacjenci');
+ylabel('ekspresja');
+subplot(1,2,2)
+heatmap(ekspresja(:, resultHier{2,7}==1))
+title('chorzy');
+xlabel('pacjenci');
+ylabel('ekspresja');
+suptitle('wyniki klasteryzacja hierarchiczna');
+
+figure(3);
+subplot(1,2,1)
+heatmap(ekspresja(:, resultKohonen{1,3}==0))
+title('zdrowi');
+xlabel('pacjenci');
+ylabel('ekspresja');
+subplot(1,2,2)
+heatmap(ekspresja(:, resultKohonen{1,3}==1))
+xlabel('pacjenci');
+ylabel('ekspresja');
+title('chorzy');
+suptitle('wyniki sie� Kohonena');
+
+
